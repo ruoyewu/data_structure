@@ -7,7 +7,7 @@ using namespace std;
 void printList(List<float> *list);
 
 int main() {
-    ArrayList<float> *arr = new ArrayList<float>();
+    auto *arr = new LinkedList<float>();
     arr->add(1);
     arr->add(2);
     arr->add(3);
@@ -15,7 +15,10 @@ int main() {
     arr->add(5);
     printList(arr);
 
-    arr->moveLeft(3);
+    arr->reverse();
+    printList(arr);
+
+    arr->locate(2);
     printList(arr);
 
     arr->add(6, 0);

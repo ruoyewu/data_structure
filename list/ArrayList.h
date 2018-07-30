@@ -21,13 +21,13 @@ public:
         data = new T[size];
     }
 
-    ArrayList(int size) {
+    explicit ArrayList(int size) {
         data = new T[size];
         this->size = 0;
         maxSize = size;
     }
 
-    ArrayList(List<T>& origin) {
+    explicit ArrayList(List<T>& origin) {
         int size = origin.length();
         data = new T[size];
         for (int i = 0; i < size; ++i) {

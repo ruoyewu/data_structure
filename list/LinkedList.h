@@ -13,17 +13,20 @@ struct Node {
     T data;
     Node<T> *next;
     Node<T> *pre;
+    int fre;
 
     Node(T data) {
         this->data = data;
         next = NULL;
         pre = NULL;
+        fre = 0;
     }
 
     Node(T data, Node<T>* pre) {
         this->data = data;
         next = NULL;
         this->pre = pre;
+        fre = 0;
     }
 };
 
@@ -180,6 +183,81 @@ public:
             delete tail;
             tail = n;
         }
+    }
+
+    /**
+     * 只考虑单链表的情况下逆置
+     */
+    void reverse() {
+        Node<T> *h, *t, *p;
+        if (head != NULL) {
+            h = head;
+            t = head->next;
+            h->next = NULL;
+        } else {
+            return;
+        }
+        while (t != NULL) {
+            p = t;
+            t = t->next;
+            p->next = h;
+            h->pre = p;
+            h = p;
+        }
+        head = h;
+        head->pre = NULL;
+    }
+
+    /**
+     * 带有 frequency 属性的查询运算
+     */
+    int locate(T x) {
+        Node<T> *h = head, *p;
+        while (h != NULL) {
+            if (h->data == x) {
+                p = h;
+                p->fre += 1;
+                if (h->pre == NULL) {
+                    head = h->next;
+                    head->pre = NULL;
+                } else {
+                    h->pre->next = h->next;
+                    h->next->pre = h->pre;
+                }
+                break;
+            } else {
+                h = h->next;
+            }
+        }
+
+        if (p != NULL) {
+            h = head;
+            while (h != NULL) {
+                if (p->fre < h->fre) {
+                    if (h->next != NULL) {
+                        h = h->next;
+                    } else {
+                        h->next = p;
+                        p->pre = h;
+                        p->next = NULL;
+                    }
+                } else {
+                    if (h->pre == NULL) {
+                        p->next = h;
+                        head = p;
+                        head->pre = NULL;
+                    } else {
+                        h->pre->next->pre = p;
+                        p->next = h->pre->next;
+                        p->pre = h->pre;
+                        h->pre->next = p;
+                    }
+                    break;
+                }
+            }
+        }
+
+        return -1;
     }
 };
 
