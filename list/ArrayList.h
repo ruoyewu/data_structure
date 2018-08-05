@@ -119,6 +119,11 @@ public:
         return size == 0;
     }
 
+    bool clear() {
+        size = 0;
+        return true;
+    }
+
     void destroy() {
         delete[] data;
     }

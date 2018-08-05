@@ -1,40 +1,66 @@
 #include <iostream>
 #include "list/ArrayList.h"
-#include "list/LinkedList.h"
+#include "stack/Stack.h"
+#include "stack/ArrayStack.h"
+#include "stack/LinkedStack.h"
+#include "tree/Compare.h"
+#include "tree/LinkedBinaryTree.h"
 
 using namespace std;
 
 void printList(List<float> *list);
+void printStack(ArrayStack<float> stack);
+void printStack(LinkedStack<float> stack);
 
 int main() {
-    auto *arr = new LinkedList<float>();
-    arr->add(1);
-    arr->add(2);
-    arr->add(3);
-    arr->add(4);
-    arr->add(5);
-    printList(arr);
+//    string str;
+//
+//    cout << calculate(string("3.2 1.5 + 123 *"));
 
-    arr->reverse();
-    printList(arr);
+    class Com : public Compare<float> {
+    public:
+        int compare(float first, float second) override {
+            return static_cast<int>(second - first);
+        }
+    };
+    Com com;
 
-    arr->locate(2);
-    printList(arr);
+    auto* binaryTree = new LinkedBinaryTree<float>(com);
 
-    arr->add(6, 0);
-    printList(arr);
-
-    arr->removeAt(2);
-    printList(arr);
-
-    arr->remove(3);
-    printList(arr);
+//    LinkedStack<float> *stack = new LinkedStack<float>();
+//    stack->push(1);
+//    stack->push(2);
+//    stack->push(3);
+//
+//    stack->push(4);
+//    printStack(*stack);
+//
+//    stack->push(5);
+//    printStack(*stack);
 }
 
 void printList(List<float> *list) {
     cout << "size: " << list->length() << endl;
     for (int i = 0; i < list->length(); ++i) {
         cout << list->get(i) << " ";
+    }
+    cout << endl;
+}
+
+void printStack(ArrayStack<float> stack) {
+    cout << "address: " << &stack << "\tsize: " << sizeof(stack) << endl;
+    cout << "size: " << stack.length() << endl;
+    while (!stack.empty()) {
+        cout << stack.pop() << " ";
+    }
+    cout << endl;
+}
+
+void printStack(LinkedStack<float> stack) {
+    cout << "address: " << &stack << "\tsize: " << sizeof(stack) << endl;
+    cout << "size: " << stack.length() << endl;
+    while (!stack.empty()) {
+        cout << stack.pop() << " ";
     }
     cout << endl;
 }

@@ -9,20 +9,20 @@
 #include "List.h"
 
 template <typename T>
-struct Node {
+struct ListNode {
     T data;
-    Node<T> *next;
-    Node<T> *pre;
+    ListNode<T> *next;
+    ListNode<T> *pre;
     int fre;
 
-    Node(T data) {
+    ListNode(T data) {
         this->data = data;
         next = NULL;
         pre = NULL;
         fre = 0;
     }
 
-    Node(T data, Node<T>* pre) {
+    ListNode(T data, ListNode<T>* pre) {
         this->data = data;
         next = NULL;
         this->pre = pre;
@@ -33,8 +33,8 @@ struct Node {
 template <typename T>
 class LinkedList: public List<T> {
 private:
-    Node<T> *head;
-    Node<T> *tail;
+    ListNode<T> *head;
+    ListNode<T> *tail;
     int size;
 
 public:
@@ -45,7 +45,7 @@ public:
     }
 
     ~LinkedList() {
-        Node<T> *n;
+        ListNode<T> *n;
         while (tail != NULL) {
             n = tail->pre;
             delete tail;
@@ -59,7 +59,7 @@ public:
 
     T get(int position) {
         int i = 0;
-        Node<T> *n = head;
+        ListNode<T> *n = head;
         while(n != NULL) {
             if (i++ == position) {
                 return n->data;
@@ -72,7 +72,7 @@ public:
 
     int indexAt(T ele) {
         int i = 0;
-        Node<T> *n = head;
+        ListNode<T> *n = head;
         while(n != NULL) {
             if (n->data == ele) {
                 return i;
@@ -85,9 +85,9 @@ public:
 
     bool add(T ele) {
         if (head == NULL) {
-            tail = head = new Node<T>(ele);
+            tail = head = new ListNode<T>(ele);
         } else {
-            Node<T> *n = new Node<T>(ele, tail);
+            ListNode<T> *n = new ListNode<T>(ele, tail);
             tail->next = n;
             tail = n;
         }
@@ -97,8 +97,8 @@ public:
 
     bool add(T ele, int position) {
         int i = 0;
-        Node<T> *n = head;
-        Node<T> *node = new Node<T>(ele);
+        ListNode<T> *n = head;
+        ListNode<T> *node = new ListNode<T>(ele);
         if (n == NULL) {
             tail = head = node;
         } else if (position == 0) {
@@ -109,7 +109,7 @@ public:
         else {
             while (n->next != NULL) {
                 if (i == position) {
-                    Node<T> *pre = n->pre;
+                    ListNode<T> *pre = n->pre;
                     pre->next = node;
                     node->pre = n->pre;
                     node->next = n;
@@ -131,10 +131,10 @@ public:
 
     T removeAt(int position) {
         int i = 0;
-        Node<T> *n = head;
+        ListNode<T> *n = head;
         while (n != NULL) {
             if (i++ == position) {
-                Node<T> *pre = n->pre;
+                ListNode<T> *pre = n->pre;
                 if (pre == NULL) {
                     head = n->next;
                 } else {
@@ -152,10 +152,10 @@ public:
     }
 
     T remove(T ele) {
-        Node<T> *n = head;
+        ListNode<T> *n = head;
         while(n != NULL) {
             if (n->data == ele) {
-                Node<T> *pre = n->pre;
+                ListNode<T> *pre = n->pre;
                 if (pre == NULL) {
                     head = n->next;
                 } else {
@@ -177,7 +177,7 @@ public:
     }
 
     void destroy() {
-        Node<T> *n;
+        ListNode<T> *n;
         while (tail != NULL) {
             n = tail->pre;
             delete tail;
@@ -189,7 +189,7 @@ public:
      * 只考虑单链表的情况下逆置
      */
     void reverse() {
-        Node<T> *h, *t, *p;
+        ListNode<T> *h, *t, *p;
         if (head != NULL) {
             h = head;
             t = head->next;
@@ -212,7 +212,7 @@ public:
      * 带有 frequency 属性的查询运算
      */
     int locate(T x) {
-        Node<T> *h = head, *p;
+        ListNode<T> *h = head, *p;
         while (h != NULL) {
             if (h->data == x) {
                 p = h;
