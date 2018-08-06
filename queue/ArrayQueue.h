@@ -18,7 +18,7 @@ private:
 
 public:
     explicit ArrayQueue(int maxSize) {
-        this->maxSize = maxSize;]
+        this->maxSize = maxSize;
         data = new T[maxSize];
     }
 

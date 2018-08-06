@@ -23,20 +23,15 @@ int main() {
             return static_cast<int>(second - first);
         }
     };
-    Com com;
+    Compare<float>* com = new Com();
 
-    auto* binaryTree = new LinkedBinaryTree<float>(com);
+    LinkedBinaryTree<float> binaryTree(com);
 
-//    LinkedStack<float> *stack = new LinkedStack<float>();
-//    stack->push(1);
-//    stack->push(2);
-//    stack->push(3);
-//
-//    stack->push(4);
-//    printStack(*stack);
-//
-//    stack->push(5);
-//    printStack(*stack);
+    float preOrder[7] = {1, 2, 3, 4, 5, 6, 7};
+    binaryTree.preToPost(preOrder, 7);
+    for (int i = 0; i < 7; ++i) {
+        cout << preOrder[i] << " ";
+    }
 }
 
 void printList(List<float> *list) {

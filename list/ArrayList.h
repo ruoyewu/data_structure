@@ -201,11 +201,6 @@ public:
      * 故选择第二种方法实现
      */
     bool moveLeft(int n) {
-//        int x = size - n;
-//        reverse(0, size - 1);
-//        reverse(0, x - 1);
-//        reverse(x, size - 1);
-
         reverse(0, n - 1);
         reverse(n, size - 1);
         reverse(0, size - 1);
@@ -242,6 +237,15 @@ public:
         return NULL;
     }
 
+    void reverse(int from, int to) {
+        int mid = (to - from + 1) / 2;
+        for (int i = 0; i < mid; ++i) {
+            T tem = data[from + i];
+            data[from + i] = data[to - i];
+            data[to - i] = tem;
+        }
+    }
+
 private:
 
     bool expend() {
@@ -253,15 +257,6 @@ private:
         delete[] data;
         data = newData;
         return true;
-    }
-
-    void reverse(int from, int to) {
-        int mid = (to - from + 1) / 2;
-        for (int i = 0; i < mid; ++i) {
-            T tem = data[from + i];
-            data[from + i] = data[to - i];
-            data[to - i] = tem;
-        }
     }
 };
 
