@@ -5,6 +5,7 @@
 #include "stack/LinkedStack.h"
 #include "tree/Compare.h"
 #include "tree/LinkedBinaryTree.h"
+#include "tree/BalanceBinaryTree.h"
 
 using namespace std;
 
@@ -13,25 +14,23 @@ void printStack(ArrayStack<float> stack);
 void printStack(LinkedStack<float> stack);
 
 int main() {
-//    string str;
-//
-//    cout << calculate(string("3.2 1.5 + 123 *"));
-
     class Com : public Compare<float> {
     public:
         int compare(float first, float second) override {
             return static_cast<int>(second - first);
         }
     };
-    Compare<float>* com = new Com();
 
-    LinkedBinaryTree<float> binaryTree(com);
-
-    float preOrder[7] = {1, 2, 3, 4, 5, 6, 7};
-    binaryTree.preToPost(preOrder, 7);
-    for (int i = 0; i < 7; ++i) {
-        cout << preOrder[i] << " ";
+    BalanceBinaryTree<float> balanceTree(new Com());
+    for (int i = 0; i < 5; ++i) {
+        balanceTree.add((i+1)*3);
     }
+    for (int j = 10; j > 5; --j) {
+        balanceTree.add(j);
+    }
+
+    balanceTree.remove(3);
+    balanceTree.remove(9);
 }
 
 void printList(List<float> *list) {

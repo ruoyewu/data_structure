@@ -73,6 +73,90 @@ public:
         size++;
         return true;
     }
+    
+    bool find(T ele) {
+        BinaryTreeNode<T>* n = root;
+        while (n != NULL) {
+            int res = com->compare(n->data, ele);
+            if (res < 0) {
+                n = n->left;
+            }else if (res > 0) {
+                n = n->right;
+            }else {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    bool remove(T ele) {
+        BinaryTreeNode<T>* n = root;
+        BinaryTreeNode<T>* pre = NULL;
+        bool isLeft = true;
+        bool isOk = false;
+        while (n != NULL) {
+            int res = com->compare(n->data, ele);
+            if (res == 0) {
+                // 查找到要删除的节点之后，执行删除操作
+                // 删除节点的时候，需要根据父节点和当前节点的子节点来决定如何删除
+                
+                if (n->left == NULL && n->right == NULL) {
+                    // 当前节点无子节点
+                    // 要考虑当前节点是否是根节点，以及当前节点是父节点的左子节点还是右子节点
+                    pre == NULL ? (root = NULL) 
+                                : (isLeft ? (pre->left = NULL) : (pre->right = NULL));
+                    isOk = true;
+                    break;
+                }else if (n->left == NULL) {
+                    // 当前节点只有右节点
+                    pre == NULL ? (root = n->right)
+                                : (isLeft ? (pre->left = n->right) : (pre->right = n->right));
+                    isOk = true;
+                    break;
+                }else if (n->right == NULL) {
+                    // 当前节点只有左节点
+                    pre == NULL ? (root = n->left)
+                                : (isLeft ? (pre->left = n->left) : (pre->right = n->left));
+                    isOk = true;
+                    break;
+                }else {
+                    // 当前节点既有左子树又有右子树
+                    // 此时可以有两种选择，将左子树的最右节点放到这里，或者是将右子树最左节点放到这里
+                    
+                    // 寻找左子树的最右节点
+                    BinaryTreeNode<T>* r = n->left;
+                    isLeft = true;
+                    pre = n;
+                    while (r->right != NULL) {
+                        pre = r;
+                        isLeft = false;
+                        r = r->right;
+                    }
+                    // 将当前节点的值修改为这个值
+                    n->data = r->data;
+                    // 然后就是删除树中的这个最右节点了，可以确定这个节点属于没有右子树的节点
+                    // 左子树可能有可能没有，所以替换这个节点为其左子树
+                    isLeft ? (pre->left = r->left) : (pre->right = r->left);
+                    isOk = true;
+                    break;
+                }
+            }else if (res > 0) {
+                pre = n;
+                isLeft = false;
+                n = n->right;
+            }else if (res < 0) {
+                pre = n;
+                isLeft = true;
+                n = n->left;
+            }
+        }
+        if (isOk) size--;
+        return isOk;
+    }
+
+    int length() {
+        return size;
+    }
 
     void clearOut() {
         visitList->clear();
@@ -126,6 +210,10 @@ public:
     /**
      * 中序遍历，非递归
      */
+    void inOrder() {
+        inOrder(root);
+    }
+
     void inOrder(BinaryTreeNode<T>* node) {
         if (node != NULL) {
             ArrayStack<BinaryTreeNode<T>*> stack;
@@ -235,7 +323,6 @@ public:
             }
         }
     }
-
     /**
      * 层序遍历，自下而上，自右而左
      * 即将原有的层序遍历逆序访问
@@ -327,11 +414,11 @@ public:
      * 求所有叶节点带权路径的长度和
      * 使用非递归后序遍历，每次找到一个叶节点，栈中保存的即是路径，然后依次取出并求路径长度即可
      */
-    float getWPL(BinaryTreeNode* node) {
+    float getWPL(BinaryTreeNode<T>* node) {
         float len = 0;
         if (node != NULL) {
             ArrayStack<T> stack;
-            BinaryTreeNode* pre;
+            BinaryTreeNode<T>* pre;
             while (node != NULL || !stack.empty()) {
                 if (node != NULL) {
                     stack.push(node);
@@ -351,7 +438,7 @@ public:
                                 s.push(stack.pop());
                             }
                             while (!s.empty()) {
-                                BinaryTreeNode* n = s.pop();
+                                BinaryTreeNode<T>* n = s.pop();
                                 l += n->data;
                                 stack.push(n);
                             }
@@ -364,6 +451,32 @@ public:
             }
         }
         return len;
+    }
+    
+    /**
+     * 已知一棵树的层次序列与每个节点的度，构造孩子-兄弟链表
+     * 此时假设 BinaryTreeNode 中的 data 存放的就是当前节点的度
+     */
+    void buildTree(BinaryTreeNode<T>** nodes) {
+        ArrayQueue<BinaryTreeNode<T>*> queue;
+        int i = 0;
+        BinaryTreeNode<T>* node;
+        root = nodes[0];
+        queue.enqueue(nodes[i++]);
+        while (!queue.empty()) {
+            node = queue.dequeue();
+            int degree = node->data;
+            if (degree > 0) {
+                node->left = nodes[i++];
+                node = node->left;
+                queue.enqueue(node);
+                for (int j = 1; j < degree; ++j) {
+                    node->right = nodes[i++];
+                    node = node->right;
+                    queue.enqueue(node);
+                }
+            }
+        }
     }
 
 private:
