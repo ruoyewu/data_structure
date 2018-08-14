@@ -48,11 +48,6 @@ public:
         size = 0;
     }
 
-    ~BalanceBinaryTree() {
-        delete root;
-        delete com;
-    }
-
     /**
      * 在平衡树中插入节点
      * @param ele 插入节点值
@@ -101,7 +96,6 @@ public:
                                     );
                         }
                         preLeft = n->left;
-                        delete n;
                     }
                     break;
                 }else {
@@ -183,7 +177,6 @@ public:
                         node->data = r->data;
                         BalanceFindNode<T>* pre = stack.top();
                         (pre->left ? pre->node->left : pre->node->right) = r->left;
-                        delete r;
                     }
 
                     // 删除节点完成之后，沿着访问路径回溯，依次修改当前结构，使之平衡

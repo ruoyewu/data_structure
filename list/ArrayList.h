@@ -37,10 +37,6 @@ public:
         maxSize = size;
     }
 
-    ~ ArrayList() {
-        delete[] data;
-    }
-
     int length() {
         return size;
     }
@@ -99,8 +95,9 @@ public:
             for (int i = position; i < size - 1; ++i) {
                 data[i] = data[i + 1];
             }
+            T re = data[size-1];
             data[--size] = NULL;
-            return true;
+            return re;
         }else {
             return NULL;
         }
@@ -254,7 +251,6 @@ private:
         for (int i = 0; i < size; ++i) {
             newData[i] = data[i];
         }
-        delete[] data;
         data = newData;
         return true;
     }

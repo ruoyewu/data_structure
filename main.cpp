@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include "list/ArrayList.h"
 #include "stack/Stack.h"
 #include "stack/ArrayStack.h"
@@ -6,6 +7,7 @@
 #include "tree/Compare.h"
 #include "tree/LinkedBinaryTree.h"
 #include "tree/BalanceBinaryTree.h"
+#include "graph/LinkedGraph.h"
 
 using namespace std;
 
@@ -14,23 +16,19 @@ void printStack(ArrayStack<float> stack);
 void printStack(LinkedStack<float> stack);
 
 int main() {
-    class Com : public Compare<float> {
-    public:
-        int compare(float first, float second) override {
-            return static_cast<int>(second - first);
-        }
-    };
-
-    BalanceBinaryTree<float> balanceTree(new Com());
-    for (int i = 0; i < 5; ++i) {
-        balanceTree.add((i+1)*3);
-    }
-    for (int j = 10; j > 5; --j) {
-        balanceTree.add(j);
+    LinkedGraph<long> graph;
+    for (int i = 0; i < 10; ++i) {
+        graph.add(i+1);
     }
 
-    balanceTree.remove(3);
-    balanceTree.remove(9);
+    graph.add(1, 3, 3);
+    graph.add(1, 5, 5);
+    graph.add(1, 7, 7);
+    graph.add(5, 9, 45);
+    graph.add(9, 8, 72);
+    graph.add(7, 8, 56);
+
+    graph.traverseBreadth();
 }
 
 void printList(List<float> *list) {

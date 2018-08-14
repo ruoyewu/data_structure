@@ -53,6 +53,13 @@ public:
         return data[head++];
     }
 
+    T getHead() {
+        if (head >= tail) {
+            return NULL;
+        }
+        return data[head];
+    }
+
 private:
     void expend() {
         int size = tail - head;
