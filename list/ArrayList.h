@@ -70,6 +70,8 @@ public:
         return true;
     }
 
+    // 添加在尾部，直接添加
+    // 添加在中间，对应位置之后的元素统统后移，然后将对应位置数据更改
     bool add(T ele, int position) {
         if (position >= size) {
             return add(ele);
@@ -110,6 +112,36 @@ public:
         } else {
             return NULL;
         }
+    }
+
+    bool exchange(int from, int to) {
+        if (from >= 0 && from < size && to >= 0 && to < size && from != to) {
+            T tem = data[from];
+            data[from] = data[to];
+            data[to] = tem;
+            return true;
+        }
+        return false;
+    }
+
+    // 删除从 from 到 to 位置的数据
+    bool removeAt(int from, int to) {
+        if (from > to || from < 0 || from >= size || to < 0) {
+            return false;
+        }
+
+        if (to >= size - 1) {
+            size = from;
+            return true;
+        }
+
+        int range = to - from + 1;
+        for (int i = 0; i < range; ++i) {
+            data[from+i] = data[to+i+1];
+        }
+        size -= range;
+
+        return true;
     }
 
     bool empty() {

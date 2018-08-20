@@ -8,6 +8,8 @@
 #include "tree/LinkedBinaryTree.h"
 #include "tree/BalanceBinaryTree.h"
 #include "graph/LinkedGraph.h"
+#include "tree/BTree.h"
+#include "query/Query.h"
 
 using namespace std;
 
@@ -16,19 +18,9 @@ void printStack(ArrayStack<float> stack);
 void printStack(LinkedStack<float> stack);
 
 int main() {
-    LinkedGraph<long> graph;
-    for (int i = 0; i < 10; ++i) {
-        graph.add(i+1);
-    }
-
-    graph.add(1, 3, 3);
-    graph.add(1, 5, 5);
-    graph.add(1, 7, 7);
-    graph.add(5, 9, 45);
-    graph.add(9, 8, 72);
-    graph.add(7, 8, 56);
-
-    graph.traverseBreadth();
+    String S("温柔没人信");
+    String T("没人");
+    cout << indexKmp(S, T);
 }
 
 void printList(List<float> *list) {
