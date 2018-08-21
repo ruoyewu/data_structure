@@ -7,8 +7,6 @@
 
 #include <iostream>
 #include <stack>
-#include "../stack/ArrayStack.h"
-#include "../stack/LinkedStack.h"
 using namespace std;
 
 template <typename T>
