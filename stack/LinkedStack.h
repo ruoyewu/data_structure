@@ -6,15 +6,16 @@
 #define DATA_STRUCTURE_LINKEDSTACK_H
 
 #include <iostream>
-#include "stack.h"
+#include "Stack.h"
 
 template <typename T>
 struct StackNode {
-    T data;
+    T* data;
     StackNode<T>* next;
 
-    StackNode(T ele) {
-        data = ele;
+    explicit StackNode(T* data) {
+        this->data = data;
+        this->next = NULL;
     }
 };
 
@@ -37,30 +38,35 @@ public:
         return size;
     }
 
-    bool push(T ele) {
-        StackNode<T>* node = new StackNode<T>(ele);
+    bool push(T& ele) {
+        auto* node = new StackNode<T>(&ele);
         node->next = head;
         head = node;
         size++;
         return true;
     }
 
-    T pop() {
-        if (size == 0) {
-            return NULL;
-        }
-        StackNode<T>* h = head;
-        T ele = h->data;
-        head = h->next;
-        size --;
-        return ele;
+    bool push(const T& ele) {
+
+        return true;
     }
 
-    T top() {
+    T& pop() {
         if (size == 0) {
-            return NULL;
+            throw -1;
         }
-        return head->data;
+        StackNode<T>* h = head;
+        T* ele = h->data;
+        head = h->next;
+        size --;
+        return *ele;
+    }
+
+    T& top() {
+        if (size == 0) {
+            throw -1;
+        }
+        return *(head->data);
     }
 
     bool clear() {

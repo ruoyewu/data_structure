@@ -9,24 +9,19 @@
 #include "Stack.h"
 
 template <typename T>
-class ArrayStack : public Stack<T> {
+class ArrayStack : public Stack<T>{
 private:
-    T *data;
+    long* data;
     int size = 0;
     int maxSize = 4;
 public:
-
     explicit ArrayStack(int maxSize) {
         this->maxSize = maxSize;
-        data = new T[maxSize];
+        data = new long[maxSize];
     }
 
     ArrayStack() {
-        data = new T[maxSize];
-    }
-
-    ~ArrayStack() {
-        delete[] data;
+        data = new long[maxSize];
     }
 
     bool empty() {
@@ -37,41 +32,50 @@ public:
         return this->size;
     }
 
-    bool push(T ele) {
+    bool push(T& ele) {
         if (size >= maxSize) {
             expend();
         }
-        data[size++] = ele;
+        data[size++] = (long)&ele;
         return true;
     }
 
-    T pop() {
-        if (size > 0) {
-            return data[--size];
+    bool push(const T& ele) {
+        if (size >= maxSize) {
+            expend();
         }
-        return NULL;
+        data[size++] = (long)&ele;
+        return true;
     }
 
-    T top() {
+    T& pop() {
         if (size > 0) {
-            return data[size - 1];
+            return *(T*)data[--size];
         }
-        return NULL;
+        throw -1;
+    }
+
+    T& top() {
+        if (size > 0) {
+            return *(T*)data[size - 1];
+        }
+        throw -1;
     }
 
     bool clear() {
-        delete[] data;
+        delete data;
+        maxSize = 4;
+        data = new long[maxSize];
+        size = 0;
         return true;
     }
-
 private:
     void expend() {
         int max = maxSize << 1;
-        T* newData = new T[max];
+        long* newData = new long[max];
         for (int i = 0; i < maxSize; ++i) {
             newData[i] = data[i];
         }
-//        delete data;
         data = newData;
         maxSize = max;
     }

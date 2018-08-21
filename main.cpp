@@ -10,6 +10,7 @@
 #include "graph/LinkedGraph.h"
 #include "tree/BTree.h"
 #include "query/Query.h"
+#include "sort/Sort.h"
 
 using namespace std;
 
@@ -18,9 +19,14 @@ void printStack(ArrayStack<float> stack);
 void printStack(LinkedStack<float> stack);
 
 int main() {
-    String S("温柔没人信");
-    String T("没人");
-    cout << indexKmp(S, T);
+    int ele[] = {1, 3, 5, 7, 9, 2, 4, 6, 8, 0};
+    int n = 10;
+    sortQuickNR<int>(ele, n);
+
+    for (int i = 0; i < n; ++i) {
+        cout << ele[i] << " ";
+    }
+    cout << endl;
 }
 
 void printList(List<float> *list) {

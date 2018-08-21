@@ -124,7 +124,7 @@ public:
         return false;
     }
 
-    // 删除从 from 到 to 位置的数据
+    // 删除从 low 到 to 位置的数据
     bool removeAt(int from, int to) {
         if (from > to || from < 0 || from >= size || to < 0) {
             return false;
