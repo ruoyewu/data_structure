@@ -9,6 +9,6 @@ include_directories(sort)
 
 add_executable(data_structure
         list/array_list.h
-        query/Query.h
-        sort/Sort.h
+        query/query.h
+        sort/sort.h
         main.cpp)

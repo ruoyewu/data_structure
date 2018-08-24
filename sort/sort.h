@@ -7,10 +7,14 @@
 
 #include <iostream>
 #include <stack>
+#include <vector>
 using namespace std;
 
 template <typename T>
 void swap(T* ele, int f, int t);
+
+template <typename T>
+void print(T* ele, int n);
 
 /**
  * 直接插入排序
@@ -115,6 +119,34 @@ void sortBobble(T* ele, int n) {
 }
 
 /**
+ * 双向冒泡排序
+ */
+template <typename T>
+void sortBubbleRL(T* ele, int n) {
+    bool f;
+    // 只需要 n/2 次遍历即可
+    for (int i = 1; i < n/2; i++) {
+        // 先将最大的元素冒泡到尾端
+        for (int j = i; j < n; ++j) {
+            if (ele[j] < ele[j-1]) {
+                swap(ele, j, j-1);
+                f = true;
+            }
+        }
+        // 再将最小的元素冒泡到头部
+        for (int j = n-i-1; j >= i; j--) {
+            if (ele[j] > ele[j+1]) {
+                swap(ele, j, j+1);
+                f = true;
+            }
+        }
+        if (!f) {
+            return;
+        }
+    }
+}
+
+/**
  * 快速排序
  */
 template <typename T>
@@ -190,6 +222,191 @@ void sortQuickNR(T* ele, int n) {
 
 
 /**
+ * 找到数组中第 k 小的元素
+ * 利用快速排序的划分思想
+ */
+template <typename T>
+T findK(T* ele, int n, int k) {
+    int start = 0, end = n-1;
+    while (true) {
+        int p = partition(ele, start, end);
+        if (p == k-1) {
+            return ele[p];
+        }else if (p > k-1) {
+            end = p-1;
+        }else if (p < k-1) {
+            start = p+1;
+        }
+    }
+}
+
+
+/**
+ * 选择排序
+ */
+
+/**
+ * 简单选择排序
+ *
+ * 不稳定
+ */
+template <typename T>
+void sortSelect(T* ele, int n) {
+    for (int i = 0; i < n-1; ++i) {
+        int min = i;
+        for (int j = i+1; j < n; ++j) {
+            if (ele[min] > ele[j]) {
+                min = j;
+            }
+        }
+        if (min != i)
+            swap(ele, i, min);
+    }
+}
+
+/**
+ * 堆排序
+ * 使用大根堆（小根堆）的方式，每次找到待排序集合中的最大（最小）值
+ * 使用堆排序要经历 建堆、拿出根、调整堆 这样一系列的过程
+ */
+
+/**
+ * 调整堆
+ * 调整以 k 为根节点的子树成为大根堆
+ * 从 k 节点开始，比较其与子节点的大小，在这三个值中（k k的左孩子 k 的右孩子）找到最大的那个使之成为根节点
+ * 然后再移动 k 到其有变动的子节点上，继续使之成为大根堆
+ */
+template <typename T>
+void adjustHeap(T* ele, int n, int k) {
+    T t = ele[k];
+    for (int i = 2*k+1; i < n; i = i*2+1) {
+        if (i < n-1 && ele[i] < ele[i+1])
+            i++;
+        if (ele[i] <= t)
+            break;
+        else {
+            ele[k] = ele[i];
+            k = i;
+        }
+    }
+    ele[k] = t;
+}
+
+template <typename T>
+void sortHeap(T* ele, int n) {
+    for (int i = n/2 - 1; i >= 0; i--) {
+        adjustHeap(ele, n, i);
+    }
+
+    for (int i = n-1; i > 0; i--) {
+        swap(ele, i, 0);
+        adjustHeap(ele, i, 0);
+    }
+}
+
+
+/**
+ * 二路归并排序
+ * 利用合并两个有序数组的方法，从仅含单个元素的数组开始，依次将两个相邻的子数组合并
+ * 最终完成整个数组的合并（即排序）
+ */
+template <typename T>
+void merge(T* ele, T* tem, int l, int m, int h) {
+    int i, j, k;
+    for (i = l; i <= h; ++i) {
+        tem[i] = ele[i];
+    }
+    for (i = l, j = m+1, k = l; i <= m && j <= h; ) {
+        if (tem[i] <= tem[j]) {
+            ele[k++] = tem[i++];
+        }else {
+            ele[k++] = tem[j++];
+        }
+    }
+    while (i <= m)
+        ele[k++] = tem[i++];
+    while (j <= h)
+        ele[k++] = tem[j++];
+}
+
+template <typename T>
+void sortMerge(T* ele, int n) {
+    int s = 2, i;
+    int tem[n];
+    print<T>(ele, n);
+    while (s <= n) {
+        i = 0;
+        while (i+s <= n) {
+            int m = i + s/2 - 1;
+            merge<T>(ele, tem, i, m, i+s-1);
+            i += s;
+        }
+        if (i < n-1) {
+            merge<T>(ele, tem, i, i + s/2 - 1, n-1);
+        }
+        s *= 2;
+    }
+
+    s /= 2;
+    if (s < n) {
+        merge<T>(ele, tem, 0, s-1, n-1);
+    }
+}
+
+
+/**
+ * 基数排序
+ */
+int getBit(int n) {
+    int b = 0;
+    while (n > 9) {
+        n /= 10;
+        b++;
+    }
+    return b;
+}
+
+int getBit(int n, int b) {
+    for (int i = 0; i < b; ++i) {
+        n /= 10;
+    }
+    return n % 10;
+}
+
+void sortRadix(int* ele, int n) {
+    vector<vector<int>> vec;
+    for (int i = 0; i < 10; ++i) {
+        vec.emplace_back();
+    }
+
+    int maxBit = 0;
+    for (int i = 0; i < n; ++i) {
+        int b = getBit(ele[n]);
+        if (b > maxBit) {
+            maxBit = b;
+        }
+    }
+
+    for (int i = 0; i <= maxBit; ++i) {
+        for (vector<int> v : vec) {
+            v.clear();
+        }
+
+        for (int j = 0; j < n; ++j) {
+            vec[getBit(ele[j], i)].push_back(ele[j]);
+        }
+
+        int k = 0;
+        for (vector<int> v : vec) {
+            for (int l : v) {
+                ele[k++] = l;
+            }
+        }
+    }
+}
+
+
+/**
  * 交换
  * @tparam T
  * @param ele
@@ -201,6 +418,14 @@ void swap(T* ele, int f, int t) {
     T e = ele[f];
     ele[f] = ele[t];
     ele[t] = e;
+}
+
+template <typename T>
+void print(T* ele, int n) {
+    for (int i = 0; i < n; ++i) {
+        cout << ele[i] << " ";
+    }
+    cout << endl;
 }
 
 #endif //DATA_STRUCTURE_SORT_H
