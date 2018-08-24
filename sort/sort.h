@@ -407,6 +407,38 @@ void sortRadix(int* ele, int n) {
 
 
 /**
+ * 计数排序
+ */
+
+/**
+ * 计数排序，基于比较
+ */
+template <typename T>
+void sortCount(T* ele, int n) {
+    int count[n];
+    T tem[n];
+    for (int i = 0; i < n; ++i) {
+        count[i] = 0;
+        tem[i] = ele[i];
+    }
+
+    for (int i = 0; i < n; ++i) {
+        for (int j = i+1; j < n; ++j) {
+            if (ele[i] > ele[j]) {
+                count[i]++;
+            }else {
+                count[j]++;
+            }
+        }
+    }
+
+    for (int i = 0; i < n; ++i) {
+        ele[count[i]] = tem[i];
+    }
+}
+
+
+/**
  * 交换
  * @tparam T
  * @param ele
