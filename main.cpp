@@ -1,17 +1,27 @@
 #include <iostream>
 #include <vector>
 #include "sort.h"
-//#include "../list/array_list.h"
+#include "list/list.h"
+#include "list/question.h"
+#include "stack/stack.h"
+#include "tree/tree.h"
 
 using namespace std;
 
-int main() {
-   int a[] = {1, 3, 5, 7, 9, 2, 4, 6, 8, 0, 1};
-   int n = 11;
-   sortCount(a, n);
+template <typename T>
+int com(T x, T y) {
+    return (int) y-x;
+}
 
-    for (int i = 0; i < n; ++i) {
-        cout << a[i] << " ";
-    }
-    cout << endl;
+int main() {
+    BTree<int> tree = NULL;
+    addNode(tree, 4, com);
+    addNode(tree, 3, com);
+    addNode(tree, 2, com);
+    addNode(tree, 1, com);
+    addNode(tree, 6, com);
+    addNode(tree, 5, com);
+    addNode(tree, 7, com);
+
+    LinkedList<int> list = inOrder(tree);
 }

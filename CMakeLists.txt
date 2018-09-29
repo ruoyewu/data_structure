@@ -8,7 +8,6 @@ include_directories(query)
 include_directories(sort)
 
 add_executable(data_structure
-        list/array_list.h
         query/query.h
         sort/sort.h
-        main.cpp)
+        main.cpp list/list.h list/question.h stack/stack.h queue/queue.h tree/tree.h)
