@@ -17,7 +17,7 @@
  */
 template <typename T>
 struct BinaryTreeNode {
-    typedef BinaryTreeNode BTNode, *BTree;
+    typedef BinaryTreeNode BTNode;
 
     T data;
     BTNode* lc = NULL;
@@ -664,6 +664,95 @@ BTree<T> convertToBT(Tree<T> tree) {
     }
 
     return bTree;
+}
+
+
+template <typename T>
+struct HuffmanTreeNode {
+    T data = NULL;
+    float weight = 0;
+
+    HuffmanTreeNode* lc = NULL;
+    HuffmanTreeNode* rc = NULL;
+
+    explicit HuffmanTreeNode(T data) {
+        this->data = data;
+    }
+};
+
+template <typename T>
+using HTNode = HuffmanTreeNode<T>;
+
+template <typename T>
+using HTree = HuffmanTreeNode<T>*;
+
+template <typename T>
+HTree<T> initHuffman(T* codes, const float* weights, int length) {
+    if (length == 0) {
+        return NULL;
+    }
+    if (length == 1) {
+        HTNode<T>* node = new HTNode<T>(codes[0]);
+        node->weight = weights[0];
+        return node;
+    }
+
+    HTNode<T>* l1 = NULL;
+    HTNode<T>* l2 = NULL;
+    LinkedList<HTNode<T>*> list = NULL;
+
+    // 初始化结点
+    for (int i = 0; i < length; ++i) {
+        HTNode<T>* t = new HTNode<T>(codes[i]);
+        t->weight = weights[i];
+        addNode(list, t);
+    }
+
+
+    HTNode<T>* node = NULL;
+    while (true) {
+        findLow(l1, l2, list);
+
+        node = new HTNode<T>(NULL);
+        node->lc = l1;
+        node->rc = l2;
+        node->weight = l1->weight + l2->weight;
+        if (empty(list)) {
+            break;
+        }
+    }
+
+    return node;
+}
+
+template <typename T>
+void findLow(HTree<T> &l1, HTree<T> &l2, LinkedList<HTree<T>> &list) {
+    l1 = NULL, l2 = NULL;
+    for (int i = 0; i < sizeOf(list); i++) {
+        HTNode<T>* node = getNodeAt(list, i);
+        if (l1 == NULL) {
+            l1 = node;
+        } else if (l2 == NULL) {
+            l2 = node;
+        } else if (l1->weight > node->weight) {
+            l1 = node;
+        } else if (l2->weight > node->weight) {
+            l2 = node;
+        }
+    }
+
+    removeNode(list, l1);
+    removeNode(list, l2);
+}
+
+template <typename T>
+char* encode(HTree<T> &tree, T* code, int length) {
+    // TODO
+}
+
+template <typename T>
+T* decode(HTree<T> &tree, char* code, int length) {
+    // TODO
 }
 
 // question

@@ -28,16 +28,21 @@ int main() {
 //    removeNode(tree, 1, com);
 
 
-    int c = 1;
-    Tree<int> tree = new TreeNode<int>(c++);
+//    int c = 1;
+//    Tree<int> tree = new TreeNode<int>(c++);
+//
+//    for (int i = 0; i < 3; ++i) {
+//        TreeNode<int>* ni = new TreeNode<int>(c++);
+//        for (int j = 0; j < 3; ++j) {
+//            addNode(ni->children, new TreeNode<int>(c++));
+//        }
+//        addNode(tree->children, ni);
+//    }
+//
+//    convertToBT(tree);
 
-    for (int i = 0; i < 3; ++i) {
-        TreeNode<int>* ni = new TreeNode<int>(c++);
-        for (int j = 0; j < 3; ++j) {
-            addNode(ni->children, new TreeNode<int>(c++));
-        }
-        addNode(tree->children, ni);
-    }
+    char codes[10] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+    float weights[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    HTree<char> tree = initHuffman(codes, weights, 10);
 
-    convertToBT(tree);
 }
